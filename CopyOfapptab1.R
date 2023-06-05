@@ -8,12 +8,14 @@ library(leaflet)
 
 # load dataset ====
 raw_data <- read_csv(file = "file_ais_ext_aa.csv")
+view(raw_data)
+str(raw_data)
 
 # Filter data untuk ditampilkan dalam box
-vesselName <- c("All", unique(raw_data$VesselName))
-vesselName
-vesselType <- c("All", unique(raw_data$VesselType))
-vesselType
+VesselName <- c("All", unique(raw_data$VesselName))
+VesselName
+VesselType <- c("All", unique(raw_data$VesselType))
+VesselType
 
 # ui part ====
 # bagian UI ====
@@ -73,7 +75,7 @@ ui <- dashboardPage(
             selectInput(
               inputId = "VesselName",
               label = "Vessel Name:",
-              vesselName)
+              VesselName)
           ),
           
           # Input Box vessel type
@@ -82,7 +84,7 @@ ui <- dashboardPage(
             selectInput(
               inputId ="VesselType",
               label = "Vessel Type:",
-              vesselType)
+              VesselType)
           )
         ),
         fluidRow(
@@ -160,8 +162,9 @@ ui <- dashboardPage(
           inputId = "Filter", 
           label = "Filter"
         ),
-        uiOutput(outputId = "shipprofile_infobox")
-      )
+        uiOutput(outputId = "shipprofile_infobox"),
+        
+        )
     ),
     
     
@@ -354,9 +357,16 @@ server <- function(input, output, session) {
         title = "Ship Dimension",
         icon = icon("box"),
         value = ev()$Width %>% unique()
-      )
+      ),
+      #Menampilkan Tabel
+      tabPanel("Historical Data",DT::dataTableOutput("Tab1", height = 6), width = 6)
+      
     )
   })
+  
+  #Output Table
+  output$Tab1 <- DT::renderDataTable(DT::datatable({
+    data <-raw_data }))
   
 }
 
