@@ -359,7 +359,10 @@ server <- function(input, output, session) {
         value = ev()$Width %>% unique()
       ),
       #Menampilkan Tabel
-      tabPanel("Historical Data",DT::dataTableOutput("Tab1", height = 6), width = 6)
+      box(width = 6,
+        tabPanel("Historical Data",DT::dataTableOutput("Tab1", height = 6))
+      )
+      
       
     )
   })
